@@ -36,3 +36,37 @@ module "security" {
   source = "./modules/security"
   vpc_id = module.vpc.vpc_id
 }
+
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 20.0"
+
+  cluster_name    = "jotinha-eks-cluster"
+  cluster_version = "1.29"
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.public_subnet_ids
+
+
+  eks_managed_node_groups = {
+    general_workers = {
+      name           = "geral-workers"
+      instance_types = ["t3.medium"]
+
+      min_size     = 2
+      max_size     = 5 
+      desired_size = 2 
+
+      subnet_ids = module.vpc.private_subnet_ids
+
+      vpc_security_group_ids = [module.security.worker_sg_id]
+    }
+  }
+
+  enable_irsa = true
+
+  tags = {
+    "Terraform" = "true"
+    "Project"   = "Jotinha-Desafio"
+  }
+}
