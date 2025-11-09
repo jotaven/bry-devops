@@ -48,3 +48,9 @@ output "eks_oidc_provider_url" {
   description = "A URL do 'posto de segurança' (OIDC) do EKS."
   value       = module.eks.cluster_oidc_issuer_url
 }
+
+output "externaldns_iam_role_arn" {
+  description = "O 'crachá' que o ExternalDNS usará."
+  value       = module.iam_roles.externaldns_role_arn
+  sensitive   = true
+}

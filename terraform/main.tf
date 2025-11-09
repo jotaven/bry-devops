@@ -88,3 +88,10 @@ module "eks" {
     "Project"   = "Jotinha-Desafio"
   }
 }
+
+module "iam_roles" {
+  source = "./modules/iam_roles"
+
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = module.eks.cluster_oidc_issuer_url
+}
