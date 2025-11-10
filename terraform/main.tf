@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "jotinha-dev-terraform-state-prod"
+    bucket         = "jotinha-dev-terraform-state-prod-2"
     key            = "global/infra-base/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "jotinha-dev-terraform-lock"
@@ -49,7 +49,7 @@ module "eks" {
 
   access_entries = {
     "mac-joao-admin" = {
-      principal_arn = "arn:aws:iam::398019064856:user/mac-joao"
+      principal_arn = "arn:aws:iam::964986728056:user/terraform-admin"
 
       cluster_access_policy_associations = {
         "cluster-admin" = {
