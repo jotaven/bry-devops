@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
 
     principals {
       type        = "Federated"
-      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/token.actions.githubusercontent.com"]
+      identifiers = ["${aws_iam_openid_connect_provider.github.arn}"]
     }
 
     condition {
@@ -63,6 +63,15 @@ resource "aws_iam_role" "github_actions_infra" {
   tags = {
     "Purpose" = "CICD-Infra-Admin"
   }
+}
+
+resource "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+  client_id_list = [
+    "sts.amazonaws.com",
+    "https://github.com/jotaven/bry-devops" 
+  ]
+  thumbprint_list = ["6938fd42d871676cd7d519ee0113fae992be29e8"] 
 }
 
 resource "aws_iam_role_policy_attachment" "github_actions_infra_admin" {
