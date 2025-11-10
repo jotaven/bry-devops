@@ -21,9 +21,10 @@ data "aws_iam_policy_document" "externaldns_policy" {
     actions = [
       "route53:ChangeResourceRecordSets",
       "route53:ListResourceRecordSets",
-      "route53:ListHostedZonesByName"
+      "route53:ListHostedZonesByName",
+      "route53:ListHostedZones"
     ]
-    resources = ["*"]
+    resources = ["*"] 
   }
 }
 
