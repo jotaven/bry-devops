@@ -69,7 +69,7 @@ module "eks" {
   eks_managed_node_groups = {
     general_workers = {
       name           = "geral-workers"
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.large"]
 
       min_size     = 2
       max_size     = 5 
@@ -89,9 +89,13 @@ module "eks" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 module "iam_roles" {
   source = "./modules/iam_roles"
 
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.cluster_oidc_issuer_url
+
+  account_id = data.aws_caller_identity.current.account_id 
 }

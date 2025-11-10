@@ -38,3 +38,34 @@ resource "aws_iam_role_policy" "externaldns" {
   role   = aws_iam_role.externaldns.id
   policy = data.aws_iam_policy_document.externaldns_policy.json
 }
+
+data "aws_iam_policy_document" "github_actions_assume_role" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/token.actions.githubusercontent.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:jotaven/bry-devops:*"] 
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions_infra" {
+  name = "GitHubActions-Infra-Admin"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+  tags = {
+    "Purpose" = "CICD-Infra-Admin"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_infra_admin" {
+  role       = aws_iam_role.github_actions_infra.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess" 
+}

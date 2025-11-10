@@ -54,3 +54,8 @@ output "externaldns_iam_role_arn" {
   value       = module.iam_roles.externaldns_role_arn
   sensitive   = true
 }
+
+output "github_actions_infra_role_arn" {
+  description = "IAM Role ARN para o GitHub Actions assumir o Deploy da infraestrutura."
+  value       = module.iam_roles.github_actions_infra_role_arn
+}
