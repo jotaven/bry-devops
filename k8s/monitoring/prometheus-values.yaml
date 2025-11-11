@@ -1,0 +1,20 @@
+prometheus:
+  enabled: true
+  prometheusSpec:
+    retention: 3d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi 
+
+grafana:
+  enabled: true
+  adminPassword: "senha123" # Senha bem top <3 
+  
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: "ALL"
